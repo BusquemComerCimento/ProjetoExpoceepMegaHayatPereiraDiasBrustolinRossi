@@ -1,0 +1,273 @@
+{
+  "info": {
+    "name": "KitGift - Etapa 2 - CRUD",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Execute na ordem. Cria somente registros fictícios; exclui o produto criado e preserva sua categoria de teste. API local sem autenticação."
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:5000"
+    },
+    {
+      "key": "categoria_id",
+      "value": ""
+    },
+    {
+      "key": "produto_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - Criar categoria",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/categorias",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Presentes {{$guid}}\",\n  \"descricao\": \"Categoria de testes da Etapa 2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"categoria_id\", pm.response.json().id_categoria);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 - Cadastrar produto (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/produtos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Kit carinho\",\n  \"id_categoria\": {{categoria_id}},\n  \"preco\": 5990,\n  \"estoque\": 5,\n  \"descricao\": \"Caneca e chocolates\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set(\"produto_id\", pm.response.json().id_produto);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Listar produtos (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/produtos"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Produto persistido\", () => pm.expect(pm.response.json().some(p => p.id_produto === Number(pm.collectionVariables.get(\"produto_id\")))).to.be.true);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Consultar produto por ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/produtos/{{produto_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Atualizar produto (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/produtos/{{produto_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Kit carinho premium\",\n  \"id_categoria\": {{categoria_id}},\n  \"preco\": 7990,\n  \"estoque\": 3,\n  \"descricao\": \"Caneca e chocolates premium\",\n  \"ativo\": 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Confirmar alteração",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/produtos/{{produto_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"Preço atualizado\", () => pm.expect(pm.response.json().preco).to.eql(7990));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Validar campo obrigatório",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/produtos",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_categoria\": {{categoria_id}},\n  \"preco\": 5990,\n  \"estoque\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Excluir produto (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{base_url}}/produtos/{{produto_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Confirmar exclusão",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/produtos/{{produto_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - Excluir ID inexistente",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{base_url}}/produtos/{{produto_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 404\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

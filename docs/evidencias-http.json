@@ -1,0 +1,160 @@
+{
+  "executado_em": "2026-09-26T00:11:56.174150+00:00",
+  "ferramenta": "Python urllib - requisições HTTP reais; não são capturas do Thunder Client",
+  "verificacoes": [
+    {
+      "method": "GET",
+      "route": "/categorias",
+      "request": null,
+      "status": 200,
+      "response": []
+    },
+    {
+      "method": "POST",
+      "route": "/categorias",
+      "request": {
+        "nome": "Presentes",
+        "descricao": "Kits para presentear"
+      },
+      "status": 201,
+      "response": {
+        "id_categoria": 1,
+        "mensagem": "Categoria cadastrada com sucesso!"
+      }
+    },
+    {
+      "method": "POST",
+      "route": "/produtos",
+      "request": {
+        "nome": "Kit carinho premium",
+        "id_categoria": 1,
+        "preco": 7990,
+        "estoque": 3,
+        "descricao": "Caneca e chocolates"
+      },
+      "status": 201,
+      "response": {
+        "id_produto": 1,
+        "mensagem": "Produto cadastrado com sucesso!"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/produtos",
+      "request": null,
+      "status": 200,
+      "response": [
+        {
+          "ativo": 1,
+          "descricao": "Caneca e chocolates",
+          "estoque": 5,
+          "id_categoria": 1,
+          "id_produto": 1,
+          "imagem": null,
+          "nome": "Kit carinho",
+          "preco": 5990
+        }
+      ]
+    },
+    {
+      "method": "GET",
+      "route": "/produtos/1",
+      "request": null,
+      "status": 200,
+      "response": {
+        "ativo": 1,
+        "descricao": "Caneca e chocolates",
+        "estoque": 5,
+        "id_categoria": 1,
+        "id_produto": 1,
+        "imagem": null,
+        "nome": "Kit carinho",
+        "preco": 5990
+      }
+    },
+    {
+      "method": "PUT",
+      "route": "/produtos/1",
+      "request": {
+        "nome": "Kit carinho premium",
+        "id_categoria": 1,
+        "preco": 7990,
+        "estoque": 3,
+        "descricao": "Caneca e chocolates"
+      },
+      "status": 200,
+      "response": {
+        "mensagem": "Produto atualizado com sucesso!"
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/produtos/1",
+      "request": null,
+      "status": 200,
+      "response": {
+        "ativo": 1,
+        "descricao": "Caneca e chocolates",
+        "estoque": 3,
+        "id_categoria": 1,
+        "id_produto": 1,
+        "imagem": null,
+        "nome": "Kit carinho premium",
+        "preco": 7990
+      }
+    },
+    {
+      "method": "POST",
+      "route": "/produtos",
+      "request": {
+        "preco": -1
+      },
+      "status": 400,
+      "response": {
+        "erro": "O campo nome é obrigatório e deve ser um texto não vazio."
+      }
+    },
+    {
+      "method": "DELETE",
+      "route": "/produtos/1",
+      "request": null,
+      "status": 200,
+      "response": {
+        "mensagem": "Produto removido com sucesso!"
+      }
+    },
+    {
+      "method": "DELETE",
+      "route": "/produtos/1",
+      "request": null,
+      "status": 404,
+      "response": {
+        "erro": "Produto não encontrado."
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/produtos/1",
+      "request": null,
+      "status": 404,
+      "response": {
+        "erro": "Produto não encontrado."
+      }
+    },
+    {
+      "method": "POST",
+      "route": "/produtos",
+      "request": {
+        "nome": "Kit demonstracao",
+        "id_categoria": 1,
+        "preco": 4990,
+        "estoque": 10
+      },
+      "status": 201,
+      "response": {
+        "id_produto": 2,
+        "mensagem": "Produto cadastrado com sucesso!"
+      }
+    }
+  ]
+}
