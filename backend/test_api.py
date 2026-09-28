@@ -85,6 +85,19 @@ class APITest(unittest.TestCase):
             self.assertEqual(response.status_code, status)
             self.assertIn('erro', response.json)
 
+    def test_web_page_assets_and_database_are_isolated(self):
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('text/html', response.content_type)
+        self.assertIn(b'product-form', response.data)
+        response.close()
+        for path in ('/assets/main.js', '/assets/style.css'):
+            response = self.client.get(path)
+            self.assertEqual(response.status_code, 200)
+            response.close()
+        self.assertEqual(self.client.get('/api/status').status_code, 200)
+        self.assertEqual(self.client.get('/assets/../bd/banco.db').status_code, 404)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

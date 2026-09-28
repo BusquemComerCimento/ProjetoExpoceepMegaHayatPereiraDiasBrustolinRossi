@@ -1,9 +1,10 @@
-"""KitGift: API local da Etapa 2, com CRUD de produtos."""
+"""KitGift: interface da Etapa 3 e API local com CRUD de produtos."""
 import os
 import sqlite3
 from contextlib import closing
 
-from flask import Flask, jsonify, request
+from pathlib import Path
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
@@ -65,8 +66,16 @@ def create_app(database_path=None):
         return jsonify(erro='Banco temporariamente indisponível.'), 503
 
     @app.get('/')
+    def index():
+        return send_from_directory(Path(__file__).resolve().parents[1] / 'frontend', 'index.html')
+
+    @app.get('/assets/<path:filename>')
+    def assets(filename):
+        return send_from_directory(Path(__file__).resolve().parents[1] / 'frontend', filename)
+
+    @app.get('/api/status')
     def status_api():
-        return jsonify(status='sucesso', mensagem='API do KitGift - Etapa 2: CRUD e SQLite.'), 200
+        return jsonify(status='sucesso', mensagem='API do KitGift - Etapa 3: interface e SQLite.'), 200
 
     @app.get('/categorias')
     def list_categories():
