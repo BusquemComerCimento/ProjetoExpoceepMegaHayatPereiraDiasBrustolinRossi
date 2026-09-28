@@ -1,16 +1,25 @@
 # KitGift
 
-Projeto de e-commerce de kits para presente - EXPOCEEP, Etapa 2, turma 3M.
+Projeto de e-commerce de kits para presente - EXPOCEEP, Etapa 3: integração front-end e back-end, turma 3M.
+
+## Interface da Etapa 3
+
+Inicie o servidor pelos comandos abaixo e abra http://127.0.0.1:5000/ no navegador.
+A página contém cadastro de categorias, formulário de kits e listagem dinâmica via fetch.
+Os arquivos visuais ficam em `frontend/index.html`, `frontend/style.css` e `frontend/main.js`.
+A rota de diagnóstico JSON foi movida de `/` para `/api/status`.
+Não abra o HTML com duplo clique: a interface deve ser servida pelo Flask.
+Veja [o registro da Etapa 3](docs/etapa3-progresso.md), [o relatório em PDF](docs/Relatorio-Etapa3-KitGift.pdf) e [as capturas de funcionamento](docs/etapa3-evidencias/).
 
 ## Equipe
 
-- Gabriel Brustolin
-- Debora Dias
-- Hayat Rossi Azam
+- Gabriel Brustolin - nº 10
+- Débora Dias - nº 5
+- Hayat Rossi Azam - nº 13
 
 ## Entrega atual
 
-API Python/Flask conectada ao SQLite, com CRUD completo de produtos e cadastro/listagem de categorias. O banco mantém as nove tabelas da Etapa 1. Login, interface gráfica, checkout e pagamento real ficam para as próximas etapas. Esta API de laboratório, sem autenticação, deve ser executada apenas localmente.
+API Python/Flask conectada ao SQLite, com CRUD completo de produtos e cadastro/listagem de categorias. A interface da Etapa 3 foi validada no navegador: cadastro via fetch, listagem dinâmica, mensagens de erro e persistência após reiniciar o servidor. O relatório e as quatro capturas estão em docs/. O banco mantém as nove tabelas da Etapa 1. Login, checkout e pagamento real não fazem parte desta entrega. Esta API de laboratório, sem autenticação, deve ser executada apenas localmente.
 
 ## Estrutura
 
@@ -26,7 +35,14 @@ KitGift/
 │   ├── database.py
 │   ├── test_api.py
 │   └── requirements.txt
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── main.js
 └── docs/
+    ├── Relatorio-Etapa3-KitGift.pdf
+    ├── etapa3-evidencias/
+    ├── etapa3-progresso.md
     ├── modelagem.md
     ├── etapa2.md
     ├── KitGift-Etapa2.postman_collection.json
@@ -43,10 +59,10 @@ python -m venv backend/venv
 .\backend\venv\Scripts\python.exe backend/app.py
 ```
 
-Acesse http://localhost:5000/ para receber:
+Acesse http://localhost:5000/api/status para receber:
 
 ```json
-{"status":"sucesso","mensagem":"API do KitGift - Etapa 2: CRUD e SQLite."}
+{"status":"sucesso","mensagem":"API do KitGift - Etapa 3: interface e SQLite."}
 ```
 
 A API cria `bd/banco.db` automaticamente quando o banco está vazio. Ao reiniciar, os registros são preservados. Bancos da Etapa 1 com o esquema completo são reutilizados. Um banco antigo com apenas usuários será recusado: preserve uma cópia e utilize um arquivo novo, pois não há migração automática. `bd/init_db.py` continua disponível para inicialização manual de bancos novos. O caminho é calculado a partir do arquivo Python, independente da pasta do terminal.
@@ -65,7 +81,7 @@ A API cria `bd/banco.db` automaticamente quando o banco está vazio. Ao reinicia
 
 Consulte [payloads, validações e roteiro de evidências](docs/etapa2.md). Importe [a coleção Postman](docs/KitGift-Etapa2.postman_collection.json) e execute na ordem. Ela armazena os IDs retornados e confere os status HTTP. Todos os dados de demonstração são fictícios.
 
-Para executar os seis testes de integração com um banco temporário:
+Para executar os sete testes de integração com um banco temporário:
 
 ```powershell
 .\backend\venv\Scripts\python.exe -m unittest discover -s backend -p test_api.py -v
